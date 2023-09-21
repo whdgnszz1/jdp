@@ -1,0 +1,105 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  userId     Int      @id @default(autoincrement()) @map("id")
+  username   String   
+  password   String   
+  email      String   @unique
+  image      String?
+  
+  Testers    Testers[]
+  Comments   Comments[]
+  Likes      Likes[]
+}
+
+model Testers {
+  testerId   Int      @id @default(autoincrement()) @map("id")
+  userId     Int
+  title      String   @db.Text
+  content    String   @db.Text
+  image      String?  
+  views      Int      @default(0)
+  likes      Int      @default(0)
+
+  user       Users    @relation(fields: [userId], references: [userId])
+
+  Comments   Comments[]
+  Likes      Likes[]
+  Thumbnails Thumbnails[]
+  Questions  Questions[]
+  Tags       Tags[]
+  Results    Results[]
+}
+
+model Comments {
+  commentId  Int      @id @default(autoincrement()) @map("id")
+  userId     Int
+  testerId   Int
+  content    String 
+
+  user       Users    @relation(fields: [userId], references: [userId])
+  tester     Testers  @relation(fields: [testerId], references: [testerId])
+}
+
+model Likes {
+  likeId     Int      @id @default(autoincrement()) @map("id")
+  userId     Int
+  testerId   Int
+
+  user       Users    @relation(fields: [userId], references: [userId])
+  tester     Testers  @relation(fields: [testerId], references: [testerId])
+}
+
+model Thumbnails {
+  thumbnailId Int     @id @default(autoincrement()) @map("id")
+  testerId    Int
+
+  tester      Testers @relation(fields: [testerId], references: [testerId])
+}
+
+model Results {
+  resultId    Int     @id @default(autoincrement()) @map("id")
+  score       Int        
+  image       String?
+  content     String  @db.Text
+  testerId    Int
+
+  tester      Testers @relation(fields: [testerId], references: [testerId])
+
+}
+
+model Questions {
+  questionId  Int     @id @default(autoincrement()) @map("id")
+  testerId    Int
+  title       String  @unique
+  image       String?
+  
+  tester      Testers @relation(fields: [testerId], references: [testerId])
+
+  Choices     Choices[]
+}
+
+model Tags {
+  tagId       Int     @id @default(autoincrement()) @map("id")
+  testerId    Int
+  content     String
+  
+  tester      Testers @relation(fields: [testerId], references: [testerId])
+}
+
+model Choices {
+  choiceId    Int     @id @default(autoincrement()) @map("id")
+  questionId  Int
+  content     String
+  isCorrect   Boolean @default(false)
+  score       Int
+  
+  question    Questions @relation(fields: [questionId], references: [questionId])
+}
