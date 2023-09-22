@@ -11,6 +11,7 @@ import {
 } from '../controllers/users';
 // import { ensureAuthenticated } from '../middlewares/ensureAuthenticated';
 import jwt from 'jsonwebtoken';
+import { verifyToken } from '../middlewares/auth';
 
 const router = express.Router();
 
@@ -21,16 +22,16 @@ router.post('/signup', signUp);
 router.post('/login', login);
 
 // 로그아웃
-router.post('/logout', logout);
+router.post('/logout', verifyToken, logout);
 
 // 유저 정보 수정
-router.put('/update/:userId', updateUser);
+router.put('/update/:userId', verifyToken, updateUser);
 
 // 유저가 낸 테스트
-router.get('/:userId/tests', getUserTests);
+router.get('/:userId/tests', verifyToken, getUserTests);
 
 // 유저가 좋아요 한 테스트
-router.get('/:userId/likes', getUserLikeTests);
+router.get('/:userId/likes', verifyToken, getUserLikeTests);
 
 /* 소셜로그인 시 토큰 발급 */
 // 토큰 발급 함수
