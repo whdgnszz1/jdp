@@ -37,8 +37,6 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
 
   const cookieOptions: CookieOptions = {
     httpOnly: false,
-    secure: process.env.NODE_ENV! === 'production',
-    sameSite: process.env.NODE_ENV! === 'production' ? 'strict' : 'lax',
   };
 
   res.cookie('accessToken', accessToken, cookieOptions);
