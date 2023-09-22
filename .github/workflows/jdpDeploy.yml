@@ -8,7 +8,7 @@ env:
   PROJECT_NAME: jonghun_project
   BUCKET_NAME: jonghun-cicd-bucket
   CODE_DEPLOY_APP_NAME: jdp_cicd
-  DEPLOYMENT_GROUP_NAME: jdp_instance
+  DEPLOYMENT_GROUP_NAME: jdp_instance2
 
 jobs:
   deploy:
