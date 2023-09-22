@@ -27,14 +27,15 @@ model Testers {
   image      String?  
   views      Int      @default(0)
   likes      Int      @default(0)
-
+  category   String   
+  
   user       Users    @relation(fields: [userId], references: [userId])
 
   Comments   Comments[]
   Likes      Likes[]
   Thumbnails Thumbnails[]
   Questions  Questions[]
-  Tags       Tags[]
+  // Tags       Tags[]
   Results    Results[]
 }
 
@@ -86,13 +87,13 @@ model Questions {
   Choices     Choices[]
 }
 
-model Tags {
-  tagId       Int     @id @default(autoincrement()) @map("id")
-  testerId    Int
-  content     String
+// model Tags {
+//   tagId       Int     @id @default(autoincrement()) @map("id")
+//   testerId    Int
+//   content     String
   
-  tester      Testers @relation(fields: [testerId], references: [testerId])
-}
+//   tester      Testers @relation(fields: [testerId], references: [testerId])
+// }
 
 model Choices {
   choiceId    Int     @id @default(autoincrement()) @map("id")

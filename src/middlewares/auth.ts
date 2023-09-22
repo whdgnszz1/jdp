@@ -12,17 +12,17 @@ export const verifyToken = async (
   if (!authHeader) {
     return next();
   }
-
   const [tokenType, accessToken] = authHeader.split(' ');
   if (tokenType !== 'Bearer') {
     return next();
   }
-
+  console.log(accessToken);
   try {
     res.locals.decoded = jwt.verify(
       accessToken,
-      process.env.JWT_SECRET as string,
+      process.env.ACCESS_SECRET_KEY as string,
     ) as DecodedToken;
+    console.log(res.locals.decoded);
     return next();
   } catch (error: any) {
     if (error.name === 'TokenExpiredError') {
@@ -33,7 +33,7 @@ export const verifyToken = async (
 
       const decodedRefreshToken = jwt.verify(
         refreshToken,
-        process.env.REFRESH_TOKEN_SECRET as string,
+        process.env.REFRESH_SECRET_KEY as string,
       ) as DecodedToken;
 
       const user = await UsersRepositoty.getUser(decodedRefreshToken.userId);
@@ -52,7 +52,7 @@ export const verifyToken = async (
 
       const newAccessToken = jwt.sign(
         payload,
-        process.env.JWT_SECRET as string,
+        process.env.ACCESS_SECRET_KEY as string,
         { expiresIn: '1h' },
       );
 
