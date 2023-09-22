@@ -37,6 +37,8 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
 
   const cookieOptions: CookieOptions = {
     httpOnly: false,
+    sameSite: 'none',
+    secure: true,
   };
 
   res.cookie('accessToken', accessToken, cookieOptions);
