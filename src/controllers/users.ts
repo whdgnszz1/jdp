@@ -3,6 +3,8 @@ import { LoginRequest, LoginResponse, SignUpRequest } from '../dtos/users';
 import UsersService from '../services/users';
 import jwt from 'jsonwebtoken';
 import asyncHandler from '../lib/asyncHandler';
+import prisma from '../utils/prisma';
+import bcrypt from 'bcrypt';
 
 export const signUp = asyncHandler(async (req: Request, res: Response) => {
   const user: SignUpRequest = req.body;
@@ -54,6 +56,82 @@ export const logout = asyncHandler(async (req: Request, res: Response) => {
 
   res.status(200).send({ message: '로그아웃에 성공하였습니다.' });
 });
+
+export const getUserTests = asyncHandler(
+  async (req: Request, res: Response) => {
+    try {
+      const userId: number = parseInt(req.params.userId, 10); // Assuming the userId is provided as a route parameter
+      const userTests = await prisma.testers.findMany({
+        where: {
+          userId: userId,
+        },
+        select: {
+          testerId: true,
+          title: true,
+          content: true,
+        },
+      });
+
+      res.status(200).json(userTests);
+    } catch (error) {
+      console.error(error);
+      throw new Error('Could not retrieve the tests for the user');
+    }
+  },
+);
+
+export const updateUser = asyncHandler(async (req: Request, res: Response) => {
+  const userId: number = parseInt(req.params.userId, 10);
+  const updateData = req.body;
+
+  try {
+    const hashedPassword = await bcrypt.hash(updateData.password, 10);
+    const updatedUser = await prisma.users.update({
+      where: { userId: userId },
+      data: {
+        password: hashedPassword,
+        email: updateData.email,
+      },
+    });
+    res
+      .status(200)
+      .json({ message: '회원정보 수정에 성공하였습니다.', data: updatedUser });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: 'Internal Server Error', error });
+  }
+});
+
+export const getUserLikeTests = asyncHandler(
+  async (req: Request, res: Response) => {
+    const userId = parseInt(req.params.userId, 10);
+
+    try {
+      const likedTests = await prisma.likes.findMany({
+        where: {
+          userId: userId,
+        },
+        select: {
+          tester: {
+            select: {
+              testerId: true,
+              title: true,
+              content: true,
+            },
+          },
+        },
+      });
+
+      // 변환하여 plain test 객체들만 반환
+      const result = likedTests.map((lt) => lt.tester);
+      res.status(200).json(result);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  },
+);
 
 // export const editProfile = asyncHandler(
 //   async (req: Request, res: Response) => {

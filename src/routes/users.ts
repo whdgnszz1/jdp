@@ -1,7 +1,14 @@
 import passport from 'passport';
 // import { verifyToken } from './../middlewares/auth';
 import express, { Request, Response } from 'express';
-import { login, logout, signUp } from '../controllers/users';
+import {
+  getUserTests,
+  login,
+  logout,
+  signUp,
+  getUserLikeTests,
+  updateUser,
+} from '../controllers/users';
 // import { ensureAuthenticated } from '../middlewares/ensureAuthenticated';
 import jwt from 'jsonwebtoken';
 
@@ -12,6 +19,18 @@ router.post('/signup', signUp);
 
 // 로그인
 router.post('/login', login);
+
+// 로그아웃
+router.post('/logout', logout);
+
+// 유저 정보 수정
+router.put('/update/:userId', updateUser);
+
+// 유저가 낸 테스트
+router.get('/:userId/tests', getUserTests);
+
+// 유저가 좋아요 한 테스트
+router.get('/:userId/likes', getUserLikeTests);
 
 /* 소셜로그인 시 토큰 발급 */
 // 토큰 발급 함수
@@ -72,9 +91,6 @@ router.get(
   }),
   sendTokenResponse,
 );
-
-// 로그아웃
-router.post('/logout', logout);
 
 // 프로필 수정
 // router.put(
