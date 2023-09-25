@@ -2,6 +2,9 @@ import express, { Request, Response } from 'express';
 import UsersRouter from './users';
 import TestsRouter from './tests';
 import UtilRouter from './utils';
+import CommentsRouter from './comments';
+import asyncHandler from '../lib/asyncHandler';
+import prisma from '../utils/prisma';
 
 const router = express.Router();
 
@@ -12,5 +15,26 @@ router.get('/', (req: Request, res: Response) => {
 router.use('/user', UsersRouter);
 router.use('/test', TestsRouter);
 router.use('/', UtilRouter);
+router.use('/:testerId/comment', CommentsRouter);
+
+// 테스트 참가
+router.post(
+  '/participate/:testerId',
+  asyncHandler(async (req: Request, res: Response) => {
+    if (!req.user) {
+      return res.status(400).send('유저 정보가 존재하지 않습니다.');
+    }
+    const { score } = req.body;
+    const userId: number = req.user?.userId;
+    const { testerId } = req.params;
+    await prisma.results.create({
+      data: {
+        score,
+        userId,
+        testerId: +testerId,
+      },
+    });
+  }),
+);
 
 export default router;
