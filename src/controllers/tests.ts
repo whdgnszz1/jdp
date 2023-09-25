@@ -23,7 +23,12 @@ class TestsController {
               title: q.title,
               image: q.image,
               Choices: {
-                create: q.Choices ? q.Choices.create : [],
+                create: q.choices
+                  ? q.choices.map((choice) => ({
+                      content: choice.content,
+                      isCorrect: choice.isCorrect,
+                    }))
+                  : [],
               },
             })),
           },
