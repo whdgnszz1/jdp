@@ -47,16 +47,16 @@ class TestsController {
         },
       });
 
-      const result = tests.map((test) => ({
-        username: test.user.username,
-        title: test.title,
-        image: test.image,
-        category: test.category,
-        views: test.views,
-        likes: test.likes,
-      }));
+      // const result = tests.map((test) => ({
+      //   username: test.user.username,
+      //   title: test.title,
+      //   image: test.image,
+      //   category: test.category,
+      //   views: test.views,
+      //   likes: test.likes,
+      // }));
 
-      res.status(200).json(result);
+      res.status(200).json(tests);
     } catch (error) {
       console.error(error);
       throw new Error('Could not fetch tests');
