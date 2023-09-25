@@ -10,6 +10,7 @@ class TestsController {
   createTest = asyncHandler(async (req: Request, res: Response) => {
     const testInput: TestInput = req.body;
     const userId: number = res.locals.decoded.userId!;
+
     try {
       const newTest = await prisma.testers.create({
         data: {
@@ -23,15 +24,27 @@ class TestsController {
               title: q.title,
               image: q.image,
               Choices: {
-                create: q.choices
-                  ? q.choices.map((choice) => ({
-                      content: choice.content,
-                      isCorrect: choice.isCorrect,
-                    }))
-                  : [],
+                create: q.choices.map((choice) => ({
+                  content: choice.content,
+                  isCorrect: choice.isCorrect,
+                })),
               },
             })),
           },
+          Results: {
+            create: testInput.results.map((r) => ({
+              image: r.image,
+              content: r.content,
+              score: r.score,
+            })),
+          },
+          // Tags는 현재 스키마에서 주석 처리되어 있습니다.
+          // Tags를 활성화하려면, 스키마에서 Tags 모델의 주석을 제거하십시오.
+          // Tags: testInput.Tags ? {
+          //   create: testInput.Tags.map((t) => ({
+          //     content: t.content,
+          //   })),
+          // } : undefined,
         },
       });
 

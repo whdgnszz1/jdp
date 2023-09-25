@@ -1,14 +1,12 @@
 export interface ChoiceInput {
   content: string;
-  score: number;
+  isCorrect: boolean;
 }
 
 export interface QuestionInput {
   title: string;
   image?: string;
-  Choices: {
-    create: ChoiceInput[];
-  };
+  choices: ChoiceInput[];
 }
 
 export interface TagInput {
@@ -26,9 +24,7 @@ export interface TestInput {
   content: string;
   category: string;
   image?: string;
-  Tags?: {
-    create: TagInput[];
-  };
+  Tags?: TagInput[];
   questions: QuestionInput[];
   results: ResultInput[];
 }
