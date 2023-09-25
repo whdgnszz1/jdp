@@ -27,6 +27,7 @@ class TestsController {
                 create: q.choices.map((choice) => ({
                   content: choice.content,
                   isCorrect: choice.isCorrect,
+                  score: 0,
                 })),
               },
             })),
@@ -36,6 +37,7 @@ class TestsController {
               image: r.image,
               content: r.content,
               score: r.score,
+              userId: userId,
             })),
           },
           // Tags는 현재 스키마에서 주석 처리되어 있습니다.
