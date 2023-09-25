@@ -1,0 +1,11 @@
+import express, { Request, Response } from 'express';
+import { uploadImage } from '../middlewares/upload';
+const router = express.Router();
+
+router.use('/upload', uploadImage, (req: Request, res: Response) => {
+  const imageUrl = req.file?.location;
+  console.log(imageUrl);
+  res.status(200).send(imageUrl);
+});
+
+export default router;
