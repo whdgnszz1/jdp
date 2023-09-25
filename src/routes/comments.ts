@@ -4,11 +4,12 @@ import prisma from '../utils/prisma';
 import { CustomError } from '../errors/customError';
 const router = express.Router();
 
-router.post('/', verifyToken, async (req: Request, res: Response) => {
+router.post('/', async (req: Request, res: Response) => {
   const { testerId } = req.params;
   const content: string = req.body;
   const userId: number = res.locals.decoded.userId!;
-
+  console.log(res.locals);
+  console.log(testerId);
   const result = await prisma.comments.create({
     data: { userId, testerId: +testerId, content },
   });
