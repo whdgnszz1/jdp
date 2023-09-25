@@ -9,11 +9,13 @@ datasource db {
 
 model Users {
   userId     Int      @id @default(autoincrement()) @map("id")
-  username   String   
+  username   String  
+  nickname   String 
   password   String   
   email      String   @unique
   image      String?
   
+  Results    Results[]
   Testers    Testers[]
   Comments   Comments[]
   Likes      Likes[]
@@ -24,6 +26,7 @@ model Testers {
   userId     Int
   title      String   @db.Text
   content    String   @db.Text
+  participates Int @default(0) 
   image      String?  
   views      Int      @default(0)
   likes      Int      @default(0)
@@ -69,9 +72,11 @@ model Results {
   resultId    Int     @id @default(autoincrement()) @map("id")
   score       Int        
   image       String?
-  content     String  @db.Text
+  content     String?  @db.Text
+  userId      Int
   testerId    Int
 
+  user        Users   @relation(fields: [userId], references: [userId])
   tester      Testers @relation(fields: [testerId], references: [testerId])
 
 }
