@@ -25,13 +25,13 @@ router.post('/login', login);
 router.post('/logout', verifyToken, logout);
 
 // 유저 정보 수정
-router.put('/update/:userId', verifyToken, updateUser);
+router.put('/update', verifyToken, updateUser);
 
 // 유저가 낸 테스트
-router.get('/:userId/tests', verifyToken, getUserTests);
+router.get('/tests', verifyToken, getUserTests);
 
 // 유저가 좋아요 한 테스트
-router.get('/:userId/likes', verifyToken, getUserLikeTests);
+router.get('/likes', verifyToken, getUserLikeTests);
 
 /* 소셜로그인 시 토큰 발급 */
 // 토큰 발급 함수

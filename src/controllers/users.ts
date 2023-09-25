@@ -24,7 +24,7 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
   const loggedInUser: LoginResponse = await UsersService.login(user);
 
   const accessToken = jwt.sign(loggedInUser, process.env.ACCESS_SECRET_KEY!, {
-    expiresIn: process.env.NODE_ENV! === 'production' ? '1h' : '2h',
+    expiresIn: '15d',
   });
 
   const refreshToken = jwt.sign(
@@ -33,7 +33,7 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
     },
     process.env.REFRESH_SECRET_KEY!,
     {
-      expiresIn: process.env.NODE_ENV! === 'production' ? '7d' : '14d',
+      expiresIn: '15d',
     },
   );
 
@@ -60,7 +60,10 @@ export const logout = asyncHandler(async (req: Request, res: Response) => {
 export const getUserTests = asyncHandler(
   async (req: Request, res: Response) => {
     try {
-      const userId: number = parseInt(req.params.userId, 10);
+      if (!req.user) {
+        return res.status(400).send('유저 정보가 존재하지 않습니다.');
+      }
+      const userId: number = req.user?.userId;
       const userTests = await prisma.testers.findMany({
         where: {
           userId: userId,
@@ -81,7 +84,10 @@ export const getUserTests = asyncHandler(
 );
 
 export const updateUser = asyncHandler(async (req: Request, res: Response) => {
-  const userId: number = parseInt(req.params.userId, 10);
+  if (!req.user) {
+    return res.status(400).send('유저 정보가 존재하지 않습니다.');
+  }
+  const userId: number = req.user?.userId;
   const updateData = req.body;
 
   try {
@@ -105,9 +111,11 @@ export const updateUser = asyncHandler(async (req: Request, res: Response) => {
 
 export const getUserLikeTests = asyncHandler(
   async (req: Request, res: Response) => {
-    const userId = parseInt(req.params.userId, 10);
-
     try {
+      if (!req.user) {
+        return res.status(400).send('유저 정보가 존재하지 않습니다.');
+      }
+      const userId: number = req.user?.userId;
       const likedTests = await prisma.likes.findMany({
         where: {
           userId: userId,

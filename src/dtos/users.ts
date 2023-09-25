@@ -1,6 +1,7 @@
 export type SignUpRequest = {
   email: string;
   username: string;
+  nickname: string;
   password: string;
 };
 
