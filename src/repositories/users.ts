@@ -23,6 +23,7 @@ class UsersRepository {
     const newUser = await prisma.users.create({
       data: {
         email: user.email,
+        nickname: user.nickname,
         username: user.username,
         password: hashedPassword,
       },

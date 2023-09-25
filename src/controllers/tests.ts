@@ -27,9 +27,6 @@ class TestsController {
               },
             })),
           },
-          Results: {
-            create: testInput.results,
-          },
         },
       });
 
