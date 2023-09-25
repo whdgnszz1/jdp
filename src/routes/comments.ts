@@ -5,13 +5,9 @@ import { CustomError } from '../errors/customError';
 const router = express.Router();
 
 router.post('/', verifyToken, async (req: Request, res: Response) => {
-  const userId = req.user?.userId;
   const { testerId } = req.params;
   const content: string = req.body;
-
-  if (!userId) {
-    throw new CustomError(400, '유저의 정보가 존재하지 않습니다.');
-  }
+  const userId: number = res.locals.decoded.userId!;
 
   const result = await prisma.comments.create({
     data: { userId, testerId: +testerId, content },
@@ -21,13 +17,8 @@ router.post('/', verifyToken, async (req: Request, res: Response) => {
 
 router.put('/:commentId', verifyToken, async (req: Request, res: Response) => {
   try {
-    const userId = req.user?.userId;
     const { commentId } = req.params;
     const { content } = req.body;
-
-    if (!userId) {
-      throw new CustomError(400, '유저의 정보가 존재하지 않습니다.');
-    }
 
     if (!content) {
       throw new CustomError(400, '수정할 내용이 필요합니다.');
@@ -51,12 +42,7 @@ router.delete(
   verifyToken,
   async (req: Request, res: Response) => {
     try {
-      const userId = req.user?.userId;
       const { commentId } = req.params;
-
-      if (!userId) {
-        throw new CustomError(400, '유저의 정보가 존재하지 않습니다.');
-      }
 
       await prisma.comments.delete({
         where: { commentId: +commentId },
