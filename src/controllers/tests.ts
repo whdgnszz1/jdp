@@ -10,7 +10,7 @@ class TestsController {
   createTest = asyncHandler(async (req: Request, res: Response) => {
     const testInput: TestInput = req.body;
     const userId: number = res.locals.decoded.userId!;
-
+    console.log(testInput, res.locals);
     try {
       const newTest = await prisma.testers.create({
         data: {
