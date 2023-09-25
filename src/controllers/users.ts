@@ -60,7 +60,7 @@ export const logout = asyncHandler(async (req: Request, res: Response) => {
 export const getUserTests = asyncHandler(
   async (req: Request, res: Response) => {
     try {
-      const userId: number = parseInt(req.params.userId, 10); // Assuming the userId is provided as a route parameter
+      const userId: number = parseInt(req.params.userId, 10);
       const userTests = await prisma.testers.findMany({
         where: {
           userId: userId,

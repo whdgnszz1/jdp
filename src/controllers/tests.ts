@@ -18,9 +18,6 @@ class TestsController {
           content: testInput.content,
           image: testInput.image,
           category: testInput.category,
-          // Tags: {
-          //   create: testInput.Tags?.create,
-          // },
           Questions: {
             create: testInput.questions.map((q) => ({
               title: q.title,
@@ -50,7 +47,6 @@ class TestsController {
       const tests = await prisma.testers.findMany({
         include: {
           user: true,
-          // Tags: true,
         },
       });
 
@@ -61,7 +57,6 @@ class TestsController {
         category: test.category,
         views: test.views,
         likes: test.likes,
-        // tags: test.Tags.map((tag) => ({ tag: tag.content })),
       }));
 
       res.status(200).json(result);
@@ -80,7 +75,10 @@ class TestsController {
         },
         include: {
           user: true,
-          // Tags: true,
+          Questions: true,
+          Likes: true,
+          Results: true,
+          Thumbnails: true,
           Comments: true,
         },
       });
@@ -97,7 +95,6 @@ class TestsController {
         image: test.image,
         views: test.views,
         likes: test.likes,
-        // tags: test.Tags.map((tag) => ({ tag: tag.content })),
         comments: test.Comments.map((comment) => ({
           comment: comment.content,
         })),
