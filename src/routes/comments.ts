@@ -6,7 +6,7 @@ const router = express.Router({ mergeParams: true });
 
 router.post('/', async (req: Request, res: Response) => {
   const { testerId } = req.params;
-  const content: string = req.body;
+  const { content } = req.body;
   console.log(res.locals);
   console.log(testerId);
   const userId: number = res.locals.decoded.userId!;
