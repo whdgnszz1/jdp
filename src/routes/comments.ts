@@ -2,14 +2,15 @@ import { verifyToken } from './../middlewares/auth';
 import express, { Request, Response } from 'express';
 import prisma from '../utils/prisma';
 import { CustomError } from '../errors/customError';
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 router.post('/', async (req: Request, res: Response) => {
   const { testerId } = req.params;
   const content: string = req.body;
-  const userId: number = res.locals.decoded.userId!;
   console.log(res.locals);
   console.log(testerId);
+  const userId: number = res.locals.decoded.userId!;
+
   const result = await prisma.comments.create({
     data: { userId, testerId: +testerId, content },
   });
