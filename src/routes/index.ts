@@ -13,10 +13,10 @@ router.get('/', (req: Request, res: Response) => {
   res.status(200).send('jdp');
 });
 
+router.use('/:testerId/comment', CommentsRouter);
 router.use('/user', UsersRouter);
 router.use('/test', TestsRouter);
 router.use('/', UtilRouter);
-router.use('/:testerId/comment', CommentsRouter);
 
 // 테스트 참가
 router.post(
