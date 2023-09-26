@@ -27,7 +27,7 @@ class TestsController {
                 create: q.choices.map((choice) => ({
                   content: choice.content,
                   isCorrect: choice.isCorrect,
-                  score: 0,
+                  score: 1,
                 })),
               },
             })),
