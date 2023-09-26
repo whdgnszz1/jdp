@@ -105,6 +105,23 @@ export const updateUser = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
+export const deleteUser = asyncHandler(async (req: Request, res: Response) => {
+  const userId: number = res.locals.decoded.userId!;
+
+  try {
+    const deletedUser = await prisma.users.delete({
+      where: { userId: userId },
+    });
+    res
+      .status(200)
+      .json({ message: '회원정보 삭제에 성공하였습니다.', data: deletedUser });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: 'Internal Server Error', error });
+  }
+});
+
 export const getUserLikeTests = asyncHandler(
   async (req: Request, res: Response) => {
     try {

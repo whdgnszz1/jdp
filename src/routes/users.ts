@@ -9,6 +9,7 @@ import {
   getUserLikeTests,
   updateUser,
   getUserParticipatedTests,
+  deleteUser,
 } from '../controllers/users';
 // import { ensureAuthenticated } from '../middlewares/ensureAuthenticated';
 import jwt from 'jsonwebtoken';
@@ -27,6 +28,9 @@ router.post('/logout', verifyToken, logout);
 
 // 유저 정보 수정
 router.put('/update', verifyToken, updateUser);
+
+// 회원 탈퇴
+router.delete('/delete', verifyToken, deleteUser);
 
 // 유저가 낸 테스트
 router.get('/tests', verifyToken, getUserTests);
