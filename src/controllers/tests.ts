@@ -112,9 +112,7 @@ class TestsController {
         image: test.image,
         views: test.views,
         likes: test.likes,
-        comments: test.Comments.map((comment) => ({
-          comment: comment.content,
-        })),
+        comments: test.Comments,
       };
 
       res.status(200).json(result);
