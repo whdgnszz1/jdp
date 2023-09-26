@@ -8,6 +8,7 @@ import {
   signUp,
   getUserLikeTests,
   updateUser,
+  getUserParticipatedTests,
 } from '../controllers/users';
 // import { ensureAuthenticated } from '../middlewares/ensureAuthenticated';
 import jwt from 'jsonwebtoken';
@@ -32,6 +33,9 @@ router.get('/tests', verifyToken, getUserTests);
 
 // 유저가 좋아요 한 테스트
 router.get('/likes', verifyToken, getUserLikeTests);
+
+// 유저가 참여한 테스트
+router.get('/join', verifyToken, getUserParticipatedTests);
 
 /* 소셜로그인 시 토큰 발급 */
 // 토큰 발급 함수

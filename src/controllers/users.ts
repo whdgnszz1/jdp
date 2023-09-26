@@ -60,10 +60,8 @@ export const logout = asyncHandler(async (req: Request, res: Response) => {
 export const getUserTests = asyncHandler(
   async (req: Request, res: Response) => {
     try {
-      if (!req.user) {
-        return res.status(400).send('유저 정보가 존재하지 않습니다.');
-      }
-      const userId: number = req.user?.userId;
+      const userId: number = res.locals.decoded.userId!;
+
       const userTests = await prisma.testers.findMany({
         where: {
           userId: userId,
@@ -84,10 +82,8 @@ export const getUserTests = asyncHandler(
 );
 
 export const updateUser = asyncHandler(async (req: Request, res: Response) => {
-  if (!req.user) {
-    return res.status(400).send('유저 정보가 존재하지 않습니다.');
-  }
-  const userId: number = req.user?.userId;
+  const userId: number = res.locals.decoded.userId!;
+
   const updateData = req.body;
 
   try {
@@ -112,10 +108,8 @@ export const updateUser = asyncHandler(async (req: Request, res: Response) => {
 export const getUserLikeTests = asyncHandler(
   async (req: Request, res: Response) => {
     try {
-      if (!req.user) {
-        return res.status(400).send('유저 정보가 존재하지 않습니다.');
-      }
-      const userId: number = req.user?.userId;
+      const userId: number = res.locals.decoded.userId!;
+
       const likedTests = await prisma.likes.findMany({
         where: {
           userId: userId,
@@ -137,6 +131,32 @@ export const getUserLikeTests = asyncHandler(
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Internal Server Error' });
+    }
+  },
+);
+
+export const getUserParticipatedTests = asyncHandler(
+  async (req: Request, res: Response) => {
+    try {
+      const userId: number = res.locals.decoded.userId!;
+
+      const participatedResults = await prisma.results.findMany({
+        where: {
+          userId: userId,
+        },
+        include: {
+          tester: true,
+        },
+      });
+
+      const participatedTests = participatedResults.map(
+        (result) => result.tester,
+      );
+
+      res.status(200).json(participatedTests);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal Server Error', error });
     }
   },
 );
