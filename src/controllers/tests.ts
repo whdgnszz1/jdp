@@ -92,7 +92,11 @@ class TestsController {
         },
         include: {
           user: true,
-          Questions: true,
+          Questions: {
+            include: {
+              Choices: true,
+            },
+          },
           Likes: true,
           Results: true,
           Thumbnails: true,
@@ -113,12 +117,16 @@ class TestsController {
         views: test.views,
         likes: test.likes,
         comments: test.Comments,
+        questions: test.Questions.map((question) => ({
+          ...question,
+          choices: question.Choices,
+        })),
       };
 
       res.status(200).json(result);
     } catch (error) {
       console.error(error);
-      throw new Error('Could not fetch the test');
+      res.status(500).send('Could not fetch the test');
     }
   };
 
