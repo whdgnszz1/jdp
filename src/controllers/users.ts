@@ -4,7 +4,6 @@ import UsersService from '../services/users';
 import jwt from 'jsonwebtoken';
 import asyncHandler from '../lib/asyncHandler';
 import prisma from '../utils/prisma';
-import bcrypt from 'bcrypt';
 
 export const signUp = asyncHandler(async (req: Request, res: Response) => {
   const user: SignUpRequest = req.body;
@@ -87,12 +86,11 @@ export const updateUser = asyncHandler(async (req: Request, res: Response) => {
   const updateData = req.body;
 
   try {
-    const hashedPassword = await bcrypt.hash(updateData.password, 10);
     const updatedUser = await prisma.users.update({
       where: { userId: userId },
       data: {
-        password: hashedPassword,
-        email: updateData.email,
+        nickname: updateData.nickname,
+        image: updateData.image,
       },
     });
     res
@@ -111,6 +109,7 @@ export const deleteUser = asyncHandler(async (req: Request, res: Response) => {
   try {
     const deletedUser = await prisma.users.delete({
       where: { userId: userId },
+      include: { testers: true, comments: true, likes: true, results: true },
     });
     res
       .status(200)

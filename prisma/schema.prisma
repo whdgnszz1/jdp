@@ -15,10 +15,10 @@ model Users {
   email      String   @unique
   image      String?
   
-   testers    Testers[]    @relation("userToTesters")
-  comments   Comments[]   @relation("userToComments")
-  likes      Likes[]      @relation("userToLikes")
-  results    Results[]    @relation("userToResults")
+  testers  Testers[]  @relation("userToTesters")
+  comments Comments[] @relation("userToComments")
+  likes    Likes[]    @relation("userToLikes")
+  results  Results[]  @relation("userToResults")
 }
 
 model Testers {
@@ -32,7 +32,7 @@ model Testers {
   likes      Int      @default(0)
   category   String   
   
-  user       Users    @relation(name: "userToTesters", fields: [userId], references: [userId], onDelete: Cascade)
+  user Users @relation(name: "userToTesters", fields: [userId], references: [userId], onDelete: Cascade)
 
   Comments   Comments[]
   Likes      Likes[]
@@ -48,8 +48,8 @@ model Comments {
   testerId   Int
   content    String 
 
-  user       Users    @relation(name: "userToComments", fields: [userId], references: [userId], onDelete: Cascade)
-  tester     Testers  @relation(fields: [testerId], references: [testerId])
+  user   Users   @relation(name: "userToComments", fields: [userId], references: [userId], onDelete: Cascade)
+  tester Testers @relation(fields: [testerId], references: [testerId], onDelete: Cascade)
 }
 
 model Likes {
@@ -57,15 +57,15 @@ model Likes {
   userId     Int
   testerId   Int
 
-  user       Users    @relation(name: "userToLikes", fields: [userId], references: [userId], onDelete: Cascade)
-  tester     Testers  @relation(fields: [testerId], references: [testerId])
+  user   Users   @relation(name: "userToLikes", fields: [userId], references: [userId], onDelete: Cascade)
+  tester Testers @relation(fields: [testerId], references: [testerId], onDelete: Cascade)
 }
 
 model Thumbnails {
   thumbnailId Int     @id @default(autoincrement()) @map("id")
   testerId    Int
 
-  tester      Testers @relation(fields: [testerId], references: [testerId])
+  tester Testers @relation(fields: [testerId], references: [testerId], onDelete: Cascade)
 }
 
 model Results {
@@ -76,8 +76,8 @@ model Results {
   userId      Int
   testerId    Int
 
-  user       Users    @relation(name: "userToResults", fields: [userId], references: [userId], onDelete: Cascade)
-  tester      Testers @relation(fields: [testerId], references: [testerId])
+  user   Users   @relation(name: "userToResults", fields: [userId], references: [userId], onDelete: Cascade)
+  tester Testers @relation(fields: [testerId], references: [testerId], onDelete: Cascade)
 
 }
 
@@ -87,7 +87,7 @@ model Questions {
   title       String  @unique
   image       String?
   
-  tester      Testers @relation(fields: [testerId], references: [testerId])
+  tester Testers @relation(fields: [testerId], references: [testerId], onDelete: Cascade)
 
   Choices     Choices[]
 }
